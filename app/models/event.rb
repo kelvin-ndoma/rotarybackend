@@ -1,0 +1,11 @@
+# app/models/event.rb
+class Event < ApplicationRecord
+  belongs_to :user
+  has_many :attendances
+  has_many :users, through: :attendances
+
+  validates :name, presence: true, length: { maximum: 255 }
+  validates :location, length: { maximum: 255 }
+  validates :datetime, presence: true
+  validates :description, length: { maximum: 1000 }
+end

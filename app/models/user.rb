@@ -1,3 +1,4 @@
+# app/models/user.rb
 class User < ApplicationRecord
   enum role: { normal: 0, admin: 1 }
 
@@ -19,4 +20,7 @@ class User < ApplicationRecord
   def admin?
     role == 'admin'
   end
+
+  # Association with events
+  has_many :events
 end

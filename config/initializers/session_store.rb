@@ -1,2 +1,2 @@
-#  define the structure of the coookies
-Rails.application.config.session_store :cookie_store, key: "_rotary", domain: "the domain like vercel"
+# config/initializers/session_store.rb
+Rails.application.config.session_store :cookie_store, key: "_rotary", domain: :all, tld_length: 2

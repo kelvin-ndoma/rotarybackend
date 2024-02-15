@@ -1,4 +1,11 @@
 Rails.application.routes.draw do
+  get 'events/index'
+  get 'events/show'
+  get 'events/create'
+  get 'events/update'
+  get 'events/destroy'
+    # Sessions routes
+    
   resources :sessions, only: [:create]
   resources :registrations, only: [:create]
   
@@ -7,6 +14,9 @@ Rails.application.routes.draw do
   get :logged_in, to: "sessions#logged_in"
   patch '/sessions/update', to: 'sessions#update'
   
+   # Events routes
+   resources :events, only: [:index, :show, :create, :update, :destroy]
+
   # Admin-specific routes
   namespace :admin do
     resources :users # Add any additional admin resources here
