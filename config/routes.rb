@@ -1,11 +1,5 @@
 Rails.application.routes.draw do
-  get 'events/index'
-  get 'events/show'
-  get 'events/create'
-  get 'events/update'
-  get 'events/destroy'
-    # Sessions routes
-    
+  # Sessions routes
   resources :sessions, only: [:create]
   resources :registrations, only: [:create]
   
@@ -14,12 +8,20 @@ Rails.application.routes.draw do
   get :logged_in, to: "sessions#logged_in"
   patch '/sessions/update', to: 'sessions#update'
   
-   # Events routes
-   resources :events, only: [:index, :show, :create, :update, :destroy]
+  # Events routes
+  resources :events, only: [:index, :show, :create, :update, :destroy] do
+    # Custom routes for marking attendance and listing attendance
+    post :mark_attendance, on: :member
+    get :attendance_list, on: :member
+  end
 
   # Admin-specific routes
   namespace :admin do
-    resources :users # Add any additional admin resources here
+    resources :users do
+      # Custom route for listing all users
+      get :index, on: :collection
+    end
+    # Add any additional admin resources here
   end
 
   root to: "static#home"

@@ -23,4 +23,7 @@ class User < ApplicationRecord
 
   # Association with events
   has_many :events
+   # Association with attendances
+  has_many :attendances
+  has_many :attended_events, through: :attendances, source: :event
 end

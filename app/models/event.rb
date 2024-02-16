@@ -8,4 +8,7 @@ class Event < ApplicationRecord
   validates :location, length: { maximum: 255 }
   validates :datetime, presence: true
   validates :description, length: { maximum: 1000 }
+
+  # Association with attendances
+  has_many :attendances
 end
