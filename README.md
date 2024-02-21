@@ -1,24 +1,86 @@
-# README
+Sign up-POST
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Route- http://127.0.0.1:3000/registrations
 
-Things you may want to cover:
+json body 
 
-* Ruby version
+Normal User
+{
+  "user": {
+    "first_name":"name",
+    "last_name":"name",
+    "email": "email@example.com",
+    "password": "password",
+    "password_confirmation": "password"
+  }
+}
 
-* System dependencies
+Admin User
+{
+  "user": {
+    "first_name":"name",
+    "last_name":"name",
+    "email": "email@example.com",
+    "password": "password",
+    "password_confirmation": "password"
+    "role":"admin"
+  }
+}
 
-* Configuration
+Log in  POST
 
-* Database creation
+Route- http://127.0.0.1:3000/sessions
 
-* Database initialization
+{
+  "user": {
+    "email": "email@example.com",
+    "password": "password",
+    "password_confirmation": "password"
+   
+  }
+}
 
-* How to run the test suite
+Logged in User and Status
 
-* Services (job queues, cache servers, search engines, etc.)
+Get- http://127.0.0.1:3000/logged_in
 
-* Deployment instructions
+Admin Creating Event 
 
-* ...
+Post - http://127.0.0.1:3000/events
+
+{
+  "event": {
+    "name": "Sample Event",
+    "location": "Sample Location",
+    "datetime": "2024-02-15T12:00:00",
+    "description": "This is a sample event description"
+  }
+}
+
+Admin checking all events
+
+Get - http://127.0.0.1:3000/events
+
+Admin Get all Users in the database
+Get- http://127.0.0.1:3000/admin/users
+
+Check Mark Attendance of an event
+
+post http://127.0.0.1:3000/events/:id/mark_attendance
+
+
+sample json body for that event.
+{
+  "attendance": [
+    { "user_id": 1, "status": "present" },
+    { "user_id": 2, "status": "absent" },
+    { "user_id": 3, "status": "present" }
+  ]
+}
+
+check attendances
+
+GET http://127.0.0.1:3000/events/:id/attendance_list
+
+
+
