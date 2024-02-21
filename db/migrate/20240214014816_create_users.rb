@@ -5,7 +5,7 @@ class CreateUsers < ActiveRecord::Migration[7.1]
       t.string :last_name
       t.string :email
       t.string :password_digest
-      t.integer :role, default: 0 # Default role is 0 (normal user)
+      # t.integer :role, default: 0 # Default role is 0 (normal user)
 
       t.timestamps
     end
