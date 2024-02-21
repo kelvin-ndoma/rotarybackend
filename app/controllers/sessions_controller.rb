@@ -1,7 +1,6 @@
 class SessionsController < ApplicationController
   include CurrentUserConcern
   
-  
   # Create a session for a logged-in user
   def create
     user = User.find_by(email: params.dig("user", "email"))
