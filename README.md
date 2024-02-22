@@ -1,11 +1,13 @@
-Sign up-POST
+## Sign up-POST
 
-Route- http://127.0.0.1:3000/registrations
+***Route- http://127.0.0.1:3000/registrations***
 
 json body 
 
-Normal User
-{
+
+## Normal User
+
+```{
   "user": {
     "first_name":"name",
     "last_name":"name",
@@ -14,9 +16,12 @@ Normal User
     "password_confirmation": "password"
   }
 }
+```
 
-Admin User
-{
+
+## Admin User
+
+```{
   "user": {
     "first_name":"name",
     "last_name":"name",
@@ -26,12 +31,14 @@ Admin User
     "role":"admin"
   }
 }
+```
 
-Log in  POST
 
-Route- http://127.0.0.1:3000/sessions
+## Log in  POST
 
-{
+***Route- http://127.0.0.1:3000/sessions***
+
+```{
   "user": {
     "email": "email@example.com",
     "password": "password",
@@ -39,15 +46,19 @@ Route- http://127.0.0.1:3000/sessions
    
   }
 }
+```
 
-Logged in User and Status
+## Logged in User and Status
 
-Get- http://127.0.0.1:3000/logged_in
+***Get- http://127.0.0.1:3000/logged_in***
 
-Admin Creating Event 
 
-Post - http://127.0.0.1:3000/events
 
+## Admin Creating Event 
+
+***Post - http://127.0.0.1:3000/events***
+
+```
 {
   "event": {
     "name": "Sample Event",
@@ -56,20 +67,26 @@ Post - http://127.0.0.1:3000/events
     "description": "This is a sample event description"
   }
 }
+```
 
-Admin checking all events
 
-Get - http://127.0.0.1:3000/events
+## Admin checking all events
 
-Admin Get all Users in the database
-Get- http://127.0.0.1:3000/admin/users
+***Get - http://127.0.0.1:3000/events***
 
-Check Mark Attendance of an event
 
-post http://127.0.0.1:3000/events/:id/mark_attendance
+## Admin Get all Users in the database
+
+***Get- http://127.0.0.1:3000/admin/users***
+
+
+## Check Mark Attendance of an event
+
+***post http://127.0.0.1:3000/events/:id/mark_attendance***
 
 
 sample json body for that event.
+```
 {
   "attendance": [
     { "user_id": 1, "status": "present" },
@@ -77,10 +94,11 @@ sample json body for that event.
     { "user_id": 3, "status": "present" }
   ]
 }
+```
 
-check attendances
+## check attendances
 
-GET http://127.0.0.1:3000/events/:id/attendance_list
+***GET http://127.0.0.1:3000/events/:id/attendance_list***
 
 
 
