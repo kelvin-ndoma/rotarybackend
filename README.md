@@ -1,9 +1,8 @@
-## Sign up-POST
+# Sign up(POST)
 
-***Route- http://127.0.0.1:3000/registrations***
+**_Route- http://127.0.0.1:3000/registrations_**
 
-json body 
-
+json body
 
 ## Normal User
 
@@ -18,8 +17,9 @@ json body
 }
 ```
 
-
 ## Admin User
+
+json body
 
 ```{
   "user": {
@@ -34,29 +34,50 @@ json body
 ```
 
 
-## Log in  POST
 
-***Route- http://127.0.0.1:3000/sessions***
+# Log in (POST)
+
+**_Route- http://127.0.0.1:3000/sessions_**
+
+json body
 
 ```{
   "user": {
     "email": "email@example.com",
     "password": "password",
     "password_confirmation": "password"
-   
+
   }
 }
 ```
 
-## Logged in User and Status
-
-***Get- http://127.0.0.1:3000/logged_in***
 
 
+# Check login status
 
-## Admin Creating Event 
+***Get- http://127.0.0.1:3000/logged_in_***
 
-***Post - http://127.0.0.1:3000/events***
+## Admin login
+
+***path: http://127.0.0.1:3000/sessions***
+
+```
+{
+ "user":{
+ "email": "susan@example.com",
+ "password": "password",
+ "password_confrimation": "password"
+}
+}
+```
+
+
+
+# Admin Creating Event
+
+**_Post - http://127.0.0.1:3000/events_**
+
+json body
 
 ```
 {
@@ -70,22 +91,25 @@ json body
 ```
 
 
-## Admin checking all events
 
-***Get - http://127.0.0.1:3000/events***
+# Admin checking all events
+
+**_Get - http://127.0.0.1:3000/events_**
 
 
-## Admin Get all Users in the database
 
-***Get- http://127.0.0.1:3000/admin/users***
+# Admin Get all Users in the database
+
+**_Get- http://127.0.0.1:3000/admin/users_**
+
 
 
 ## Check Mark Attendance of an event
 
-***post http://127.0.0.1:3000/events/:id/mark_attendance***
-
+**_post http://127.0.0.1:3000/events/:id/mark_attendance_**
 
 sample json body for that event.
+
 ```
 {
   "attendance": [
@@ -98,7 +122,4 @@ sample json body for that event.
 
 ## check attendances
 
-***GET http://127.0.0.1:3000/events/:id/attendance_list***
-
-
-
+**_GET http://127.0.0.1:3000/events/:id/attendance_list_**
