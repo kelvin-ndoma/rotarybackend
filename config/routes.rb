@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :mpesas
   # Sessions routes
   resources :sessions, only: [:create]
   resources :registrations, only: [:create]
