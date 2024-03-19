@@ -2,7 +2,7 @@ class RegistrationsController < ApplicationController
   def create
     user = User.new(user_params)
 
-    # Set admin attribute based on the presence of the 'admin' parameter
+    # Set admin attribute based on the presence of the 'role' parameter
     user.role = params[:user][:role] || 'normal'
 
     if user.save
@@ -15,6 +15,6 @@ class RegistrationsController < ApplicationController
   private
 
   def user_params
-    params.require(:user).permit(:first_name, :last_name, :email, :password, :password_confirmation)
+    params.require(:user).permit(:first_name, :last_name, :email, :password, :password_confirmation, :role)
   end
 end

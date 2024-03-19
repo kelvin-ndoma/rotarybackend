@@ -1,4 +1,3 @@
-# app/models/user.rb
 class User < ApplicationRecord
   enum role: { normal: 0, admin: 1 }
 
@@ -23,7 +22,7 @@ class User < ApplicationRecord
 
   # Association with events
   has_many :events
-   # Association with attendances
-  has_many :attendances
-  has_many :attended_events, through: :attendances, source: :event
+  # Association with attendances
+  has_many :event_attendances
+  has_many :attended_events, through: :event_attendances, source: :event
 end

@@ -1,6 +1,7 @@
+# app/controllers/sessions_controller.rb
 class SessionsController < ApplicationController
   include CurrentUserConcern
-  
+
   # Create a session for a logged-in user
   def create
     user = User.find_by(email: params.dig("user", "email"))
@@ -10,7 +11,7 @@ class SessionsController < ApplicationController
       render json: {
         status: :created,
         logged_in: true,
-        user: user
+        user: user.as_json(only: [:id, :first_name, :email, :role]) # Include the user's role in the response
       }
     else
       render json: { error: "Invalid email or password" }, status: :unauthorized
@@ -20,14 +21,13 @@ class SessionsController < ApplicationController
   # Check if user is logged in
   def logged_in
     if @current_user
-      render json: {
-        logged_in: true,
-        user: @current_user
-      }
+      response_data = { logged_in: true, user: @current_user.as_json(only: [:id, :first_name, :email, :role]) }
+      if @current_user.admin?
+        response_data[:users] = User.all.as_json(only: [:id, :first_name, :email, :role])
+      end
+      render json: response_data
     else
-      render json: {
-        logged_in: false
-      }
+      render json: { logged_in: false }
     end
   end
 
@@ -52,6 +52,6 @@ class SessionsController < ApplicationController
   private
 
   def user_params
-    params.require(:user).permit( :email, :password, :password_confirmation)
+    params.require(:user).permit( :first_name, :email, :password, :password_confirmation)
   end
 end

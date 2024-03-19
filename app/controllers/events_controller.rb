@@ -51,49 +51,49 @@ class EventsController < ApplicationController
   end
 
 
-  def mark_attendance
-    user = User.find_by(id: session[:user_id])
-    event = Event.find(params[:id])
+  # def mark_attendance
+  #   user = User.find_by(id: session[:user_id])
+  #   event = Event.find(params[:id])
   
-    if user && user.admin? && event.user == user
-      params[:attendance].each do |attendance_params|
-        user_id = attendance_params[:user_id]
-        status = attendance_params[:status]
-        user = User.find(user_id)
-        attendance = Attendance.find_or_initialize_by(event: event, user: user)
-        attendance.update(status: status)
-      end
-      render json: { message: "Attendance marked successfully" }, status: :ok
-    else
-      render json: { error: "Not authorized" }, status: :unauthorized
-    end
-  end
+  #   if user && user.admin? && event.user == user
+  #     params[:attendance].each do |attendance_params|
+  #       user_id = attendance_params[:user_id]
+  #       status = attendance_params[:status]
+  #       user = User.find(user_id)
+  #       attendance = Attendance.find_or_initialize_by(event: event, user: user)
+  #       attendance.update(status: status)
+  #     end
+  #     render json: { message: "Attendance marked successfully" }, status: :ok
+  #   else
+  #     render json: { error: "Not authorized" }, status: :unauthorized
+  #   end
+  # end
   
 
   
   
-  def attendance_list
-    user = User.find_by(id: session[:user_id])
-    event = Event.find(params[:id])
+  # def attendance_list
+  #   user = User.find_by(id: session[:user_id])
+  #   event = Event.find(params[:id])
   
-    if user && (user.admin? || event.user == user)
-      if user.admin?
-        attendances = event.attendances.includes(:user)
-      else
-        attendances = event.attendances.where(user: user)
-      end
-      render json: attendances, status: :ok
-    else
-      render json: { errors: ["Not authorized"] }, status: :unauthorized
-    end
-  end
+  #   if user && (user.admin? || event.user == user)
+  #     if user.admin?
+  #       attendances = event.attendances.includes(:user)
+  #     else
+  #       attendances = event.attendances.where(user: user)
+  #     end
+  #     render json: attendances, status: :ok
+  #   else
+  #     render json: { errors: ["Not authorized"] }, status: :unauthorized
+  #   end
+  # end
   
   
-  private
+  # private
   
-  def attendance_params
-    params.permit(attendance: [:user_id, :status])
-  end
+  # def attendance_params
+  #   params.permit(attendance: [:user_id, :status])
+  # end
   
   
 

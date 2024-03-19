@@ -2,6 +2,7 @@
 class Event < ApplicationRecord
   belongs_to :user
   has_many :attendances
+  has_many :event_attendances
   has_many :users, through: :attendances
 
   validates :name, presence: true, length: { maximum: 255 }
@@ -11,4 +12,6 @@ class Event < ApplicationRecord
 
   # Association with attendances
   has_many :attendances
+  has_many :event_attendances
+  has_many :users, through: :event_attendances
 end
