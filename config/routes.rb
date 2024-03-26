@@ -9,8 +9,7 @@ Rails.application.routes.draw do
   get :logged_in, to: "sessions#logged_in"
   patch '/sessions/update', to: 'sessions#update'
 
-  post 'stkpush', to: 'mpesas#stkpush'
-  post 'stkquery', to: 'mpesas#stkquery'
+ 
   
   # Events routes
   resources :events, only: [:index, :show, :create, :update, :destroy] do
