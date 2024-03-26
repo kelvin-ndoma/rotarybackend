@@ -2,6 +2,10 @@
 
 one:
   token: MyString
+  —: MyString
+  no-test-framework: MyString
 
 two:
   token: MyString
+  —: MyString
+  no-test-framework: MyString
