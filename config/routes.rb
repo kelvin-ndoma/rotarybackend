@@ -1,27 +1,27 @@
 Rails.application.routes.draw do
-  resources :mpesas
   # Sessions routes
   resources :sessions, only: [:create]
   resources :registrations, only: [:create]
-  
-  # Custom route for updating user details, mapped to SessionsController's update action
+
+  # Custom routes for sessions
   delete :logout, to: "sessions#logout"
   get :logged_in, to: "sessions#logged_in"
   patch '/sessions/update', to: 'sessions#update'
 
- 
+  # Mpesas routes
+  resources :mpesas
+  post 'stkpush', to: 'mpesas#stkpush'
+    post 'stkquery', to: 'mpesas#stkquery'
   
   # Events routes
   resources :events, only: [:index, :show, :create, :update, :destroy] do
-    # Nested resources for event_attendances
     resources :event_attendances, only: [:create]
   end
   
   # Admin-specific routes
   namespace :admin do
     resources :users do
-      # Custom route for listing all users
-      get :index, on: :collection
+      get :index, on: :collection # Custom route for listing all users
     end
     # Add any additional admin resources here
   end
