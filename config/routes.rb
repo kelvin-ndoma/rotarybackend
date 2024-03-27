@@ -11,13 +11,16 @@ Rails.application.routes.draw do
   # Mpesas routes
   resources :mpesas
   post 'stkpush', to: 'mpesas#stkpush'
-    post 'stkquery', to: 'mpesas#stkquery'
-  
+  post 'stkquery', to: 'mpesas#stkquery'
+
   # Events routes
   resources :events, only: [:index, :show, :create, :update, :destroy] do
     resources :event_attendances, only: [:create]
   end
-  
+
+  # Payments routes
+  resources :payments, only: [:new, :create]
+
   # Admin-specific routes
   namespace :admin do
     resources :users do
@@ -33,7 +36,7 @@ Rails.application.routes.draw do
 
   # Root route
   root to: "static#home"
-  
+
   # Health check route
   get "up" => "rails/health#show", as: :rails_health_check
 end
