@@ -3,10 +3,25 @@ class EventAttendancesController < ApplicationController
   before_action :set_event_attendance, only: [:update]
 
   def index
-    # Retrieve event attendances for the current user
-    event_attendances = @current_user.event_attendances
-    render json: event_attendances, status: :ok
+    # Retrieve event attendances with eager loading for efficient data retrieval
+    event_attendances = @current_user.event_attendances.includes(:event, :user)
+    
+    # Transform data to desired format
+    attendances_data = event_attendances.map do |attendance|
+      {
+        event_name: attendance.event.name,
+        event_date: attendance.event.datetime.strftime("%Y-%m-%d %H:%M:%S"), # Include the event date
+        user: {
+          name: attendance.user.first_name,
+          # Include other user details as needed (e.g., email)
+        },
+        status: attendance.status
+      }
+    end
+  
+    render json: attendances_data, status: :ok
   end
+  
 
   def create
     # Ensure event_id is present in params
@@ -14,24 +29,29 @@ class EventAttendancesController < ApplicationController
       render json: { errors: ["Event ID is missing"] }, status: :bad_request
       return
     end
-
+  
     event = Event.find(params[:event_id])
-
-    # Find all users for the event who don't already have attendance records
-    users_without_attendance = event.users.where.not(id: event.event_attendances.pluck(:user_id))
-
-    # Create attendance records for all eligible users with a default status
-    EventAttendance.transaction do
-      users_without_attendance.each do |user|
-        EventAttendance.create!(event: event, user: user, status: 'absent')
-      end
+  
+    # Iterate over each attendance entry and create or update attendance records
+    params[:event_attendances].each do |attendance_params|
+      user_id = attendance_params[:user_id]
+      status = attendance_params[:status]
+      user = User.find(user_id)
+  
+      # Find existing attendance record for the user and event
+      event_attendance = EventAttendance.find_or_initialize_by(event: event, user: user)
+  
+      # Update attendance record with the provided status
+      event_attendance.update(status: status)
     end
-
-    render json: { message: "Attendance marked successfully" }, status: :ok
+  
+    render json: { message: "Attendances marked successfully" }, status: :ok
   rescue ActiveRecord::RecordNotFound
-    render json: { error: 'Event not found' }, status: :not_found
+    render json: { error: 'Event or user not found' }, status: :not_found
+  rescue ActiveRecord::RecordInvalid => e
+    render json: { error: e.message }, status: :unprocessable_entity
   end
-
+  
   def update
     if @event_attendance.update(event_attendance_params)
       render json: @event_attendance, status: :ok
@@ -39,6 +59,7 @@ class EventAttendancesController < ApplicationController
       render json: { errors: @event_attendance.errors.full_messages }, status: :unprocessable_entity
     end
   end
+
 
   private
 

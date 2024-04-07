@@ -18,8 +18,9 @@ Rails.application.configure do
   config.server_timing = true
 
   # mpesa config
-  config.hosts << "c5aa-165-90-6-63.ngrok-free.app"
-  config.hosts << "c5aa-165-90-6-63.ngrok-free.app"
+  config.hosts << "72c4-165-90-6-63.ngrok-free.app"
+  config.hosts << "72c4-165-90-6-63.ngrok-free.app"
+
 
   # Allow access to Rails console from specific IP address
 

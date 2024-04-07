@@ -41,37 +41,40 @@ class MpesasController < ApplicationController
   # stkquery
   def stkquery
     url = "https://sandbox.safaricom.co.ke/mpesa/stkpushquery/v1/query"
-    timestamp = Time.now.strftime("%Y%m%d%H%M%S")
+    timestamp = "#{Time.now.strftime "%Y%m%d%H%M%S"}"
     business_short_code = ENV["MPESA_SHORTCODE"]
     password = Base64.strict_encode64("#{business_short_code}#{ENV["MPESA_PASSKEY"]}#{timestamp}")
     payload = {
-      BusinessShortCode: business_short_code,
-      Password: password,
-      Timestamp: timestamp,
-      CheckoutRequestID: params[:CheckoutRequestID]
+    'BusinessShortCode': business_short_code,
+    'Password': password,
+    'Timestamp': timestamp,
+    'CheckoutRequestID': params[:checkoutRequestID]
     }.to_json
 
     headers = {
-      content_type: 'application/json',
-      Authorization: "Bearer #{get_access_token}"
+    Content_type: 'application/json',
+    Authorization: "Bearer #{ get_access_token }"
     }
 
-    response = RestClient::Request.execute(
-      method: :post,
-      url: url,
-      payload: payload,
-      headers: headers
-    )
-
+    response = RestClient::Request.new({
+    method: :post,
+    url: url,
+    payload: payload,
+    headers: headers
+    }).execute do |response, request|
     case response.code
+    when 500
+    [ :error, JSON.parse(response.to_str) ]
+    when 400
+    [ :error, JSON.parse(response.to_str) ]
     when 200
-      render json: { status: :success, data: JSON.parse(response.body) }
-    when 400, 500
-      render json: { status: :error, data: JSON.parse(response.body) }
+    [ :success, JSON.parse(response.to_str) ]
     else
-      render json: { status: :error, message: "Invalid response: #{response.code}" }
+    fail "Invalid response #{response.to_str} received."
     end
-  end
+    end
+    render json: response
+end
 
   private
 
@@ -88,6 +91,10 @@ class MpesasController < ApplicationController
         Authorization: "Basic #{userpass}"
       }
     )
+  rescue RestClient::ExceptionWithResponse => e
+    # Catching exceptions and logging errors
+    logger.error("Error fetching access token: #{e.response}")
+    raise "Unable to generate access token"
   end
 
   def get_access_token
@@ -102,5 +109,11 @@ class MpesasController < ApplicationController
     AccessToken.destroy_all
     AccessToken.create!(token: token)
     token
+  rescue StandardError => e
+    # Catching exceptions and logging errors
+    logger.error("Error getting access token: #{e.message}")
+    raise "Unable to generate access token"
   end
+
+  
 end
