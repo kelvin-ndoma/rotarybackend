@@ -9,17 +9,19 @@ Rails.application.routes.draw do
   patch '/sessions/update', to: 'sessions#update'
 
   # Route for creating payments
-  post 'payments', to: 'payments#create'
+  resources :payments, only: [:index, :create]  # Adjusted to allow both index and create actions
+
   # Mpesas routes
-  resources :mpesas
-  post 'stkpush', to: 'payments#stkpush' # Updated route to use the Payments controller
-  post 'stkquery', to: 'payments#stkquery' # Updated route to use the Payments controller
+  post 'stkpush', to: 'mpesas#stkpush'
+  post 'stkquery', to: 'mpesas#stkquery'
+  post 'mpesa/callback', to: 'payments#callback'
+  post 'fetch_access_token', to: 'mpesas#fetch_access_token'  # Added route for fetching access token
 
   # Events routes
   resources :events, only: [:index, :show, :create, :update, :destroy] do
     member do
-      get 'attendance_list', to: 'event_attendances#attendance_list'  # New route for attendance list of a specific event
-      get 'attendances', to: 'event_attendances#attendances_for_event'  # New route for retrieving attendances for a specific event
+      get 'attendance_list', to: 'event_attendances#attendance_list'
+      get 'attendances', to: 'event_attendances#attendances_for_event'
     end
     resources :event_attendances, only: [:create, :update]
   end
@@ -30,19 +32,30 @@ Rails.application.routes.draw do
       get 'all_event_attendances', to: 'users#all_event_attendances'
     end
 
-    # Consolidate the event attendances route under the events namespace
     resources :events do
-      get 'all_event_attendances', to: 'events#all_event_attendances'  # Route to fetch all attendances for a specific event
-      get 'attendances', to: 'event_attendances#attendances_for_event' # Route to fetch attendances for a specific event
+      get 'all_event_attendances', to: 'events#all_event_attendances'
+      get 'attendances', to: 'event_attendances#attendances_for_event'
     end
+
+    # Route for admins to view all payments
+    resources :payments, only: [:index, :create] # Added route for admins to view all payments
+  end
+ 
+  # Route for users to access their own payments
+  resources :users, only: [] do
+    resources :payments, only: [:index, :create]  # Added route for users to view their own payments
   end
 
-  # Route for users to access their own event attendances
-  resources :users, only: [] do
+  get '/retrieve_payment', to: 'payments#retrieve_payment'
+  post '/store_payment', to: 'payments#store_payment'
+
+   # Route for users to access their own event attendances
+   resources :users, only: [] do
     resources :event_attendances, only: [:index]
     # New route for a specific event and user's attendances
     get 'events/:event_id/attendances', to: 'event_attendances#user_attendances_for_event'
   end
+
 
   # Route to retrieve attendance records for a specific event
   get 'events/:event_id/event_attendances', to: 'attendances#index'

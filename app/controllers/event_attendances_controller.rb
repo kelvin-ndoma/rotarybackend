@@ -32,24 +32,24 @@ class EventAttendancesController < ApplicationController
   
     event = Event.find(params[:event_id])
   
-    # Iterate over each attendance entry and create or update attendance records
+    # Check if attendance for this event has already been marked
+    if EventAttendance.exists?(event: event)
+      render json: { message: "Attendance for this event has already been marked" }, status: :unprocessable_entity
+      return
+    end
+  
     params[:event_attendances].each do |attendance_params|
       user_id = attendance_params[:user_id]
       status = attendance_params[:status]
       user = User.find(user_id)
   
-      # Find existing attendance record for the user and event
-      event_attendance = EventAttendance.find_or_initialize_by(event: event, user: user)
-  
-      # Update attendance record with the provided status
-      event_attendance.update(status: status)
+      # Create a new attendance record
+      EventAttendance.create(event: event, user: user, status: status)
     end
   
     render json: { message: "Attendances marked successfully" }, status: :ok
   rescue ActiveRecord::RecordNotFound
     render json: { error: 'Event or user not found' }, status: :not_found
-  rescue ActiveRecord::RecordInvalid => e
-    render json: { error: e.message }, status: :unprocessable_entity
   end
   
   def update

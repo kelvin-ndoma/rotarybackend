@@ -18,11 +18,8 @@ Rails.application.configure do
   config.server_timing = true
 
   # mpesa config
-  config.hosts << "72c4-165-90-6-63.ngrok-free.app"
-  config.hosts << "72c4-165-90-6-63.ngrok-free.app"
-
-
-  # Allow access to Rails console from specific IP address
+  config.hosts << "d351-165-90-6-63.ngrok-free.app"
+  config.hosts << "d351-165-90-6-63.ngrok-free.app"
 
 
   # Enable/disable caching. By default caching is disabled.
