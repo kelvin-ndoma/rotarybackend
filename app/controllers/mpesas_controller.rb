@@ -47,8 +47,7 @@ class MpesasController < ApplicationController
     end
     render json: response
   end
-  
-  redirect_to payment_success_path(amount: amount, phone_number: phone_number)
+
   # stkquery
   def stkquery
     url = "https://sandbox.safaricom.co.ke/mpesa/stkpushquery/v1/query"
@@ -79,13 +78,14 @@ class MpesasController < ApplicationController
     when 400
     [ :error, JSON.parse(response.to_str) ]
     when 200
-    [ :success, JSON.parse(response.to_str) ]
+      [ :success, JSON.parse(response.to_str) ]
     else
     fail "Invalid response #{response.to_str} received."
     end
     end
     render  json: response
   end
+  # Create Payment Record
 
   # Fetch Access Token
   def fetch_access_token
@@ -110,6 +110,28 @@ class MpesasController < ApplicationController
 
   private
 
+
+  # def create_payment_record(payment_details)
+  #   event = Event.find_by(token: payment_details["event_token"])
+  #   user = current_user # Assuming you have current_user defined
+  #   amount = payment_details["amount"]
+  #   phone_number = payment_details["phone_number"]
+
+  #   payment = Payment.new(
+  #     amount: amount,
+  #     phone_number: phone_number,
+  #     user: user,
+  #     event: event
+  #   )
+
+  #   if payment.save
+  #     payment
+  #   else
+  #     fail "Failed to create payment record: #{payment.errors.full_messages.join(', ')}"
+  #   end
+  # end
+
+  
   def generate_access_token_request
     url = "https://sandbox.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials"
     consumer_key = ENV['MPESA_CONSUMER_KEY']

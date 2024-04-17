@@ -18,9 +18,8 @@ Rails.application.configure do
   config.server_timing = true
 
   # mpesa config
-  config.hosts << "d351-165-90-6-63.ngrok-free.app"
-  config.hosts << "d351-165-90-6-63.ngrok-free.app"
-
+  config.hosts << "14d1-165-90-6-63.ngrok-free.app"
+  config.hosts << "14d1-165-90-6-63.ngrok-free.app"
 
   # Enable/disable caching. By default caching is disabled.
   # Run rails dev:cache to toggle caching.

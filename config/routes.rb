@@ -46,8 +46,6 @@ Rails.application.routes.draw do
     resources :payments, only: [:index, :create]  # Added route for users to view their own payments
   end
 
-  get '/retrieve_payment', to: 'payments#retrieve_payment'
-  post '/store_payment', to: 'payments#store_payment'
 
    # Route for users to access their own event attendances
    resources :users, only: [] do
